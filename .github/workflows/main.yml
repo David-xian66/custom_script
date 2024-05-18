@@ -27,6 +27,7 @@ jobs:
         FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
         NOTE_PWD: ${{ secrets.NOTE_PWD }}
         WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        GH_REPO: ${{ github.repository }}
         
     - name: Run script
       run: python main.py
