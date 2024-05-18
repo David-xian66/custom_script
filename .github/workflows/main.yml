@@ -1,0 +1,32 @@
+name: Run Python script
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Set Global Env
+      env:
+        FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+        NOTE_PWD: ${{ secrets.NOTE_PWD }}
+        WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        
+    - name: Run script
+      run: python main.py
