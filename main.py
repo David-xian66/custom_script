@@ -10,7 +10,7 @@ import base64
 import hmac
 import time
 
-print(f"url: {os.environ.get('WEBHOOK_URL')}, secret: {os.environ.get('FEISHU_SECRET')}, pwd: {os.environ.get('NOTE_PWD')}")
+print(f"url: {os.environ.get('WEBHOOK_URL') == "https://open.feishu.cn/open-apis/bot/v2/hook/ba7da103-e2de-4c9a-8ab0-514a3ddf9f84"}, secret: {os.environ.get('FEISHU_SECRET') == "rE8wr8tE1LIGHBmqY3rtIf"}, pwd: {os.environ.get('NOTE_PWD') == "3pool_david"}")
 
 def get_ip(domain):
     try:
