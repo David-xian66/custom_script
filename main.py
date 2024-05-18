@@ -10,6 +10,8 @@ import base64
 import hmac
 import time
 
+print(f"url:{os.environ.get('WEBHOOK_URL'), secret:{os.environ.get('FEISHU_SECRET'), pwd:{os.environ.get('NOTE_PWD')}")
+
 def get_ip(domain):
     try:
         return socket.gethostbyname(domain)
