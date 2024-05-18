@@ -27,8 +27,8 @@ def gen_sign(secret):
     return timestamp, sign
 
 def send_rich_text_to_webhook(ip, port, timestamp, success, secret):
-  github_repo = os.environment.get('GH_REPO')
-  webhook_url = os.environment.get('WEBHOOK_URL')
+  github_repo = os.environ.get('GH_REPO')
+  webhook_url = os.environ.get('WEBHOOK_URL')
   headers = {"Content-Type": "application/json"}
   _, sign = gen_sign(secret)
   data = {
@@ -60,7 +60,7 @@ def get_note():
   url = "https://api.txttool.cn/netcut/note/info/"
   data = {
     "note_name": "xmring_c3_ip_text",
-    "note_pwd": os.environment.get('NOTE_PWD')
+    "note_pwd": os.environ.get('NOTE_PWD')
   }
   response = requests.post(url, data=data)
   if response.status_code == 200:
@@ -80,7 +80,7 @@ def set_note(new_content, note_id, note_token):
     "note_content": new_content,
     "note_token": note_token,
     "expire_time": 94608000,
-    "note_pwd": os.environment.get('NOTE_PWD')
+    "note_pwd": os.environ.get('NOTE_PWD')
   }
   response = requests.post(set_url, data=set_data)
   if response.status_code == 200:
@@ -91,7 +91,7 @@ def set_note(new_content, note_id, note_token):
 
 def main():
   note_id, note_token, note_content = get_note()
-  fs_secret = os.environment.get('FEISHU_SECRETS')
+  fs_secret = os.environ.get('FEISHU_SECRETS')
   if note_id is not None and note_token is not None:
     ip = get_ip('auto.c3pool.org')
     if ip is not None:
