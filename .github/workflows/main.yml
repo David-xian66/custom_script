@@ -1,8 +1,7 @@
 name: Run Python script
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
   build:
