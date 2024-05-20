@@ -116,7 +116,7 @@ def main():
     ip = get_ip('auto.c3pool.org')
     if ip is not None:
         new_content = f"{ip}:19999"
-        if note_content != new_content :
+        if note_content == new_content :
             print("内容无需更新！")
             return 0
       current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
