@@ -115,10 +115,10 @@ def main():
   if note_id is not None and note_token is not None:
     ip = get_ip('auto.c3pool.org')
     if ip is not None:
-      if note_content:
-        new_content = f"{note_content}\n{ip}:19999"
-      else:
         new_content = f"{ip}:19999"
+        if note_content == new_content :
+            print("内容无需更新！")
+            return 0
       current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
       if set_note(new_content, note_id, note_token):
         print("内容更新成功！")
