@@ -107,11 +107,13 @@ def set_note(new_content, note_id, note_token):
 def main():
     note_id, note_token, last_read_time, note_content = get_note()
     fs_secret = os.environ.get('FEISHU_SECRETS')
+    note_content_lines = note_content.split('\n')
+    note_content_last = note_content_lines[-1] if note_content_lines else None
     if note_id is not None and note_token is not None:
         ip = get_ip('auto.c3pool.org')
         if ip is not None:
             new_content = f"{ip}:19999"
-            if note_content == new_content:
+            if note_content_last == new_content:
                 print("内容无需更新！")
                 return 0
             current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
