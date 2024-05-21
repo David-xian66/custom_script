@@ -90,7 +90,7 @@ def get_note():
 def set_note(new_content, note_id, note_token):
     set_url = "https://api.txttool.cn/netcut/note/save/"
     set_data = {
-        "note_name": "xmring_c3_ip_text",
+        "note_name": "xmring_c3_ip",
         "note_id": note_id,
         "note_content": new_content,
         "note_token": note_token,
