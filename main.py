@@ -23,7 +23,7 @@ def gen_sign(timestamp, secret):
     sign = base64.b64encode(hmac_code).decode('utf-8')
     return sign
 
-def send_rich_text_to_webhook(ip, port, readable_time, last_read_time, success, secret, error_message=None):
+def send_rich_text_to_webhook(ip, port, readable_time, last_read_time, id, success, secret, error_message=None):
     github_repo = os.environ.get('GH_REPO')
     webhook_url = os.environ.get('WEBHOOK_URL')
     headers = {"Content-Type": "application/json"}
@@ -33,7 +33,8 @@ def send_rich_text_to_webhook(ip, port, readable_time, last_read_time, success, 
     last_read_time = last_read_time if last_read_time else "N/A"
     content = [
         [{"tag": "text", "text": f"触发仓库: {github_repo}"}],
-        [{"tag": "text", "text": f"新的IP: {ip if ip else 'N/A'}"}],
+        [{"tag": "text", "text": f"剪贴板ID: {id if id else 'N/A'}"}],
+        [{"tag": "text", "text": f"新IP: {ip if ip else 'N/A'}"}],
         [{"tag": "text", "text": f"端口: {port if port else 'N/A'}"}],
         [{"tag": "text", "text": f"完成时间: {readable_time}"}],
         [{"tag": "text", "text": f"上次阅读时间: {last_read_time}"}],
@@ -75,7 +76,7 @@ def get_note():
                 note_token = json_data["data"]["note_token"]
                 last_read_time = json_data["data"]["last_read_time"]
                 note_content = json_data["data"]["note_content"]
-                return note_id, note_token, last_read_time, note_content
+                return note_id, note_token, last_read_time, note_content, note_id
             else:
                 error_message = "获取剪贴板内容失败，响应数据不完整。"
                 send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, os.environ.get('FEISHU_SECRETS'), error_message)
@@ -85,12 +86,12 @@ def get_note():
     except Exception as e:
         error_message = f"获取剪贴板内容失败, 错误信息: {e}"
         send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, os.environ.get('FEISHU_SECRETS'), error_message)
-    return None, None, None, None
+    return None, None, None, None, None
 
 def set_note(new_content, note_id, note_token):
     set_url = "https://api.txttool.cn/netcut/note/save/"
     set_data = {
-        "note_name": "xmring_c3_ip_text",
+        "note_name": "xmring_c3_ip",
         "note_id": note_id,
         "note_content": new_content,
         "note_token": note_token,
@@ -105,7 +106,7 @@ def set_note(new_content, note_id, note_token):
         return False
 
 def main():
-    note_id, note_token, last_read_time, note_content = get_note()
+    note_id, note_token, last_read_time, note_content, note_id = get_note()
     fs_secret = os.environ.get('FEISHU_SECRETS')
     note_content_lines = note_content.split('\n')
     note_content_last = note_content_lines[-1] if note_content_lines else None
@@ -119,19 +120,19 @@ def main():
             current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             if set_note(new_content, note_id, note_token):
                 print("内容更新成功！")
-                send_rich_text_to_webhook(ip, "19999", current_time, last_read_time, True, fs_secret)
+                send_rich_text_to_webhook(ip, "19999", current_time, last_read_time, note_id, True, fs_secret)
             else:
                 error_message = "内容更新失败！"
                 print(error_message)
-                send_rich_text_to_webhook(ip, "19999", current_time, last_read_time, False, fs_secret, error_message)
+                send_rich_text_to_webhook(ip, "19999", current_time, last_read_time, note_id, False, fs_secret, error_message)
         else:
             error_message = "无法获取IP地址"
             print(error_message)
-            send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, fs_secret, error_message)
+            send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, note_id, False, fs_secret, error_message)
     else:
         error_message = "获取剪贴板内容失败！"
         print(error_message)
-        send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, fs_secret, error_message)
+        send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, note_id, False, fs_secret, error_message)
 
 if __name__ == "__main__":
     main()
