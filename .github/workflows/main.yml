@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v
       with:
         python-version: '3.x'
 
@@ -26,6 +26,7 @@ jobs:
       env:
         FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
         NOTE_PWD: ${{ secrets.NOTE_PWD }}
+        NOTE_PWD: ${{ secrets.NOTE_NAME }}
         WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         GH_REPO: ${{ github.repository }}
       run: python main.py
