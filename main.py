@@ -8,6 +8,9 @@ import hashlib
 import base64
 import hmac
 
+note_name = os.environ.get('NOTE_NAME')
+
+
 def get_ip(domain):
     try:
         return socket.gethostbyname(domain)
@@ -74,11 +77,10 @@ def get_note(note_name):
             json_data = response.json()
             if "data" in json_data and "note_content" in json_data["data"]:
                 note_id = json_data["data"]["note_id"]
-                note_name = json_data["data"]["note_name"]
                 note_token = json_data["data"]["note_token"]
                 last_read_time = json_data["data"]["last_read_time"]
                 note_content = json_data["data"]["note_content"]
-                return note_name, note_id, note_token, last_read_time, note_content
+                return note_id, note_token, last_read_time, note_content, note_id
             else:
                 error_message = "获取剪贴板内容失败，响应数据不完整。"
                 send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, note_name, os.environ.get('FEISHU_SECRETS'), error_message)
@@ -111,7 +113,7 @@ def set_note(new_content, note_name, note_id, note_token):
         return False
 
 def main():
-    note_name, note_id, note_token, last_read_time, note_content, note_id = get_note(note_name)
+    note_id, note_token, last_read_time, note_content, note_id = get_note(note_name)
     fs_secret = os.environ.get('FEISHU_SECRETS')
     note_content_lines = note_content.split('\n')
     note_content_last = note_content_lines[-1] if note_content_lines else None
