@@ -84,12 +84,15 @@ def get_note(note_name):
             else:
                 error_message = "获取剪贴板内容失败，响应数据不完整。"
                 send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, note_name, os.environ.get('FEISHU_SECRETS'), error_message)
+                exit(-1)
         else:
             error_message = f"获取剪贴板内容失败, 状态码: {response.status_code}"
             send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, note_name, os.environ.get('FEISHU_SECRETS'), error_message)
+            exit(-1)
     except Exception as e:
         error_message = f"获取剪贴板内容失败, 错误信息: {e}"
         send_rich_text_to_webhook(None, None, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), None, False, note_name, os.environ.get('FEISHU_SECRETS'), error_message)
+        exit(-1)
     return None, None, None, None, None
 
 def set_note(new_content, note_name, note_id, note_token):
