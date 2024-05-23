@@ -26,7 +26,7 @@ jobs:
       env:
         FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
         NOTE_PWD: ${{ secrets.NOTE_PWD }}
-        NOTE_PWD: ${{ secrets.NOTE_NAME }}
+        NOTE_NAME: ${{ secrets.NOTE_NAME }}
         WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         GH_REPO: ${{ github.repository }}
       run: python main.py
